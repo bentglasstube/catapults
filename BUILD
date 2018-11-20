@@ -29,3 +29,14 @@ pkg_winzip(
         "//content",
     ],
 )
+
+pkg_tar(
+    name = "catapults-linux",
+    files = [
+        ":catapults",
+        "//content",
+    ],
+    strip_prefix = "/",
+    package_dir = "catapults/",
+    extension = "tar.gz",
+)
