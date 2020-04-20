@@ -4,7 +4,6 @@
 
 namespace {
   const static float _X_VELO = 0.01f;
-  const static float _Y_VELO = 0.1f;
   const static int _LOAD_TIME = 1000;
   const static int _LAUNCH_TIME = 150;
   const static float ANGLE_ADJUST_RATE = 0.0001f;

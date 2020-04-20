@@ -4,7 +4,9 @@
 
 #include "stb_perlin.h"
 
-#define randf(high, low)  (low + static_cast <float> (rand()) / static_cast <float> (RAND_MAX/(high - low)))
+static inline float randf(float low, float high) {
+  return low + (float)(rand() / (double)((double)(RAND_MAX)/(high - low)));
+}
 
 Clouds::Clouds() : offset_(0), velocity_(0), height_(0) {}
 
