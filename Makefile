@@ -3,8 +3,8 @@ ifeq ($(UNAME), Windows)
 	CROSS=x86_64-w64-mingw32.static-
 endif
 
-SOURCES=$(wildcard src/*.cc) $(wildcard gam/*.cc)
-CONTENT=$(wildcard content/*.png) $(wildcard content/*.ogg) $(wildcard content/*.wav)
+SOURCES=$(wildcard *.cc) $(wildcard gam/*.cc)
+CONTENT=$(wildcard content/*)
 BUILDDIR=$(CROSS)output
 OBJECTS=$(patsubst %.cc,$(BUILDDIR)/%.o,$(SOURCES))
 NAME=catapults
@@ -53,7 +53,6 @@ $(EXECUTABLE): $(OBJECTS)
 
 $(BUILDDIR)/%.o: %.cc
 	@mkdir -p $(BUILDDIR)/gam
-	@mkdir -p $(BUILDDIR)/src
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 package: $(PACKAGE)

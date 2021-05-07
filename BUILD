@@ -1,44 +1,98 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
-load("@mxebzl//tools/windows:rules.bzl", "pkg_winzip")
-
-config_setting(
-    name = "windows",
-    values = {
-        "crosstool_top": "@mxebzl//tools/windows:toolchain",
-    }
-)
-
 cc_binary(
     name = "catapults",
     data = ["//content"],
-    linkopts = select({
-        ":windows": ["-mwindows", "-lSDL2main"],
-        "//conditions:default": [],
-    }) + [
+    linkopts = [
         "-lSDL2",
         "-lSDL2_mixer",
         "-lm",
     ],
-    deps = ["//src:main"],
-)
-
-pkg_winzip(
-    name = "catapults-windows",
-    files = [
-        ":catapults",
-        "//content",
+    srcs = ["main.cc"],
+    deps = [
+        ":title_screen",
+        "@libgam//:game",
     ],
 )
 
-pkg_tar(
-    name = "catapults-linux",
-    files = [
-        ":catapults",
-        "//content",
+cc_library(
+    name = "battle_screen",
+    srcs = ["battle_screen.cc"],
+    hdrs = ["battle_screen.h"],
+    deps = [
+        ":boulder",
+        ":catapult",
+        ":clouds",
+        ":map",
+        "@libgam//:audio",
+        "@libgam//:graphics",
+        "@libgam//:input",
+        "@libgam//:particle",
+        "@libgam//:screen",
+        "@libgam//:text",
     ],
-    strip_prefix = "/",
-    package_dir = "catapults/",
-    extension = "tar.gz",
+)
+
+cc_library(
+    name = "boulder",
+    srcs = ["boulder.cc"],
+    hdrs = ["boulder.h"],
+    deps = ["@libgam//:graphics"],
+)
+
+cc_library(
+    name = "catapult",
+    srcs = ["catapult.cc"],
+    hdrs = ["catapult.h"],
+    deps = [
+        ":map",
+        "@libgam//:graphics",
+        "@libgam//:input",
+        "@libgam//:spritemap",
+    ],
+)
+
+cc_library(
+    name = "clouds",
+    srcs = ["clouds.cc"],
+    hdrs = [
+        "clouds.h",
+        "stb_perlin.h",
+    ],
+    deps = ["@libgam//:graphics"],
+)
+
+cc_library(
+    name = "map",
+    srcs = ["map.cc"],
+    hdrs = [
+        "map.h",
+        "stb_perlin.h",
+    ],
+    deps = [
+        "@libgam//:graphics",
+        "@libgam//:text",
+    ],
+)
+
+cc_library(
+    name = "player",
+    srcs = ["player.cc"],
+    hdrs = ["player.h"],
+    deps = [
+        ":map",
+        "@libgam//:audio",
+        "@libgam//:spritemap",
+    ],
+)
+
+cc_library(
+    name = "title_screen",
+    srcs = ["title_screen.cc"],
+    hdrs = ["title_screen.h"],
+    deps = [
+        ":battle_screen",
+        "@libgam//:backdrop",
+        "@libgam//:screen",
+    ],
 )
